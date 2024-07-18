@@ -1,6 +1,0 @@
-*.log
-*.tmp
-*.temp
-.vscode/
-.DS_Store
-build/
