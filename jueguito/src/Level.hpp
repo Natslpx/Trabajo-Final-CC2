@@ -3,6 +3,9 @@
 #include <utility>
 #include "BasicItems.hpp"
 
+#ifndef LEVEL_H
+#define LEVEL_H
+
 typedef std::vector<std::unique_ptr<EnvItem>> Screen;
 typedef std::function<Screen(Player&)> ScreenLoader;
 
@@ -22,11 +25,14 @@ class Level {
     void next_screen() {
         ++current_screen;
     }
+
+    bool empty() {
+        return screens.empty();
+    }
 };
 
 template<typename T, typename ... Ptrs>
-auto make_vector( Ptrs&& ... ptrs )
-{
+auto make_vector( Ptrs&& ... ptrs ) {
     std::vector<std::unique_ptr<T>> vec;
     ( vec.emplace_back( std::forward<Ptrs>(ptrs) ), ... );
     return vec;
@@ -78,4 +84,6 @@ Screen loadTestScreen3(Player& player) {
     return envItems;
 }
 
-const Level testLevel = Level(std::vector<ScreenLoader>{loadTestScreen1, loadTestScreen2, loadTestScreen3});
+const Level testLevel(std::vector<ScreenLoader>{loadTestScreen1, loadTestScreen2, loadTestScreen3});
+
+#endif

@@ -1,23 +1,23 @@
 #include <cmath>
 #include "raylib.h"
 
+#ifndef VECTOR_OVERLOADS
+#define VECTOR_OVERLOADS
+
 Vector2 operator+(const Vector2& v1, const Vector2& v2) {
-    return (Vector2){v1.x + v2.x, v1.y + v2.y};
+    return Vector2{v1.x + v2.x, v1.y + v2.y};
 }
 
 Vector2 operator-(const Vector2& v1, const Vector2& v2) {
-    return (Vector2){v1.x - v2.x, v1.y - v2.y};
+    return Vector2{v1.x - v2.x, v1.y - v2.y};
 }
 
 Vector2 operator*(const Vector2& v, float scalar) {
-    return (Vector2){v.x * scalar, v.y * scalar};
+    return Vector2{v.x * scalar, v.y * scalar};
 }
 
 Vector2 operator/(const Vector2& v, float scalar) {
-    if (scalar == 0) {
-        //throw std::runtime_error("Division by zero");
-    }
-    return (Vector2){v.x / scalar, v.y / scalar};
+    return Vector2{v.x / scalar, v.y / scalar};
 }
 
 Vector2& operator+=(Vector2& v1, const Vector2& v2) {
@@ -39,9 +39,6 @@ Vector2& operator*=(Vector2& v, float scalar) {
 }
 
 Vector2& operator/=(Vector2& v, float scalar) {
-    if (scalar == 0) {
-        //throw std::runtime_error("Division by zero");
-    }
     v.x /= scalar;
     v.y /= scalar;
     return v;
@@ -70,7 +67,7 @@ float dist(const Vector2& v1 ,const Vector2& v2) {
 Vector2 normalized(const Vector2& v) {
     float magnitude = mag(v);
     if (magnitude == 0) {
-        return (Vector2){0, 0};
+        return Vector2{0, 0};
     }
     return v / magnitude;
 }
@@ -110,17 +107,17 @@ float heading(const Vector2& v) {
 Vector2 rotated(const Vector2& v, float angle) {
     float cosine = cos(angle);
     float sine = sin(angle); 
-    return (Vector2){v.x*cosine - v.y*sine, v.x*sine + v.y*cosine};
+    return Vector2{v.x*cosine - v.y*sine, v.x*sine + v.y*cosine};
 }
 
 Vector2& rotate(Vector2& v, float angle) {
     float cosine = cos(angle);
     float sine = sin(angle); 
-    return v = (Vector2){v.x*cosine - v.y*sine, v.x*sine + v.y*cosine};
+    return v = Vector2{v.x*cosine - v.y*sine, v.x*sine + v.y*cosine};
 }
 
 Vector2 fromAngle(float angle) {
-    return (Vector2){cos(angle), sin(angle)};
+    return Vector2{cos(angle), sin(angle)};
 }
 
 Vector2 lerp(const Vector2& v1, const Vector2& v2, float t) {
@@ -138,3 +135,5 @@ float angleBetween(const Vector2& v1, const Vector2& v2) {
 bool operator==(const Color& c1, const Color& c2) {
     return (c1.r == c2.r && c1.g == c2.g && c1.b == c2.b && c1.a == c2.a);
 }
+
+#endif

@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/home/all23tor/projects/raylib/jueguito/build",
-  "command": "/usr/bin/c++ -DPLATFORM_DESKTOP -I/home/all23tor/projects/raylib/jueguito/../src -I/home/all23tor/projects/raylib/jueguito/../src/external -g -std=gnu++23 -o CMakeFiles/main.dir/src/main.cpp.o -c /home/all23tor/projects/raylib/jueguito/src/main.cpp",
-  "file": "/home/all23tor/projects/raylib/jueguito/src/main.cpp"
-}
-]

@@ -92,6 +92,7 @@ jueguito_EXTERNAL_OBJECTS =
 
 jueguito.exe: CMakeFiles/jueguito.dir/jueguito/src/main.cpp.obj
 jueguito.exe: CMakeFiles/jueguito.dir/build.make
+jueguito.exe: C:/msys64/mingw64/lib/libraylib.dll.a
 jueguito.exe: CMakeFiles/jueguito.dir/linkLibs.rsp
 jueguito.exe: CMakeFiles/jueguito.dir/objects1.rsp
 jueguito.exe: CMakeFiles/jueguito.dir/link.txt

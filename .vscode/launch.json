@@ -1,0 +1,36 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug jueguito",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/jueguito.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "build",
+            "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",  // Cambia esto a la ruta de gdb si es necesario
+            "miDebuggerArgs": "",
+            "logging": {
+                "moduleLoad": false,
+                "programOutput": true,
+                "engineLogging": false,
+                "exceptions": false,
+                "trace": false
+            },
+            "visualizerFile": "${workspaceFolder}/.vscode/gdb-vscode.visualizers",
+            "showDisplayString": true
+        }
+    ]
+}

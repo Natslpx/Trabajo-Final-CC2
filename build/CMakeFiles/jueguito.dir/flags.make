@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = @CMakeFiles/jueguito.dir/includes_CXX.rsp
 
-CXX_FLAGS = -g -std=gnu++17
+CXX_FLAGS = -g -std=gnu++17 -IC:/msys64/mingw64/bin/../include
 

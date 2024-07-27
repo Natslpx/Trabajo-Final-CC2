@@ -1,3 +1,0 @@
-/home/all23tor/projects/raylib/jueguito/build/CMakeFiles/main.dir
-/home/all23tor/projects/raylib/jueguito/build/CMakeFiles/edit_cache.dir
-/home/all23tor/projects/raylib/jueguito/build/CMakeFiles/rebuild_cache.dir

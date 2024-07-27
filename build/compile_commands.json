@@ -1,7 +1,7 @@
 [
 {
   "directory": "E:/Natalie Lazo/raylib/build",
-  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/jueguito.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\jueguito.dir\\jueguito\\src\\main.cpp.obj -c \"E:\\Natalie Lazo\\raylib\\jueguito\\src\\main.cpp\"",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/jueguito.dir/includes_CXX.rsp -g -std=gnu++17 -IC:/msys64/mingw64/bin/../include -o CMakeFiles\\jueguito.dir\\jueguito\\src\\main.cpp.obj -c \"E:\\Natalie Lazo\\raylib\\jueguito\\src\\main.cpp\"",
   "file": "E:/Natalie Lazo/raylib/jueguito/src/main.cpp",
   "output": "CMakeFiles/jueguito.dir/jueguito/src/main.cpp.obj"
 }
