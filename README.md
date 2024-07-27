@@ -83,6 +83,9 @@ El proyecto está organizado en varios archivos, cada uno con una responsabilida
    ```sh
    ./jueguito
    ```
+## Licencia
+
+Este proyecto está licenciado bajo la Licencia GPL-3.0. Consulta el archivo [LICENSE](LICENSE) para obtener más detalles.
 
 ## Autores
 
