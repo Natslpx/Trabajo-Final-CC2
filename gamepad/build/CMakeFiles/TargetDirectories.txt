@@ -1,0 +1,3 @@
+/home/all23tor/projects/raylib/gamepad/build/CMakeFiles/main.dir
+/home/all23tor/projects/raylib/gamepad/build/CMakeFiles/edit_cache.dir
+/home/all23tor/projects/raylib/gamepad/build/CMakeFiles/rebuild_cache.dir

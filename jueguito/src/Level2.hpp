@@ -134,10 +134,11 @@ Screen load2_2(Player& player) {
     );
 
     return envItems;
+    
 }
 
 Screen load2_3(Player& player) {
-    player.position = {500, 380};  // Posición inicial del jugador
+    player.position = {400, 350};  // Posición inicial del jugador
     player.velocity = {0, 0};
 
     Screen envItems = make_vector<EnvItem>(
@@ -164,7 +165,7 @@ Screen load2_3(Player& player) {
         std::make_unique<NonClimbable>(Rectangle{300, 850, 600, 50}, BLACK),
 
         // Bloque móvil 
-        std::make_unique<MoveBlock>(Rectangle{300, 800, 150, 50}, BLUE, Vector2{-1, 0}, [](MoveBlock& mv){return mv.rect.x > 150;}),
+        std::make_unique<MoveBlock>(Rectangle{300, 800, 150, 50}, BLUE, Vector2{-1, 0}, [](MoveBlock& mv){return mv.rect.x > 50;}),
 
         // Gem para recargar dash
         std::make_unique<Gem>(150, 500),

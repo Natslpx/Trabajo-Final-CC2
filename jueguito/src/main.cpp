@@ -63,24 +63,24 @@ int main() {
     camera.zoom = 1.0f;
     
     Level level;
-    Screen screen = loadMenu(players[0], level);
+    Screen screen;
 
     SetTargetFPS(60);
 
     while (!WindowShouldClose()) {
         float deltaTime = GetFrameTime();
         if (IsKeyPressed(KEY_F)) {
-            int display = GetCurrentMonitor();            
-            if (IsWindowFullscreen()) {
-                screenWidth = initialWidth;
-                screenHeight = initialHeight;
-            } else {
-                screenWidth = GetMonitorWidth(display); 
-                screenHeight = GetMonitorHeight(display);
-            }
-            SetWindowSize(screenWidth, screenHeight);
-            ToggleFullscreen();
-        }
+ 			int display = GetCurrentMonitor();            
+                if (IsWindowFullscreen()) {
+                    screenWidth = initialWidth;
+                    screenHeight = initialHeight;
+                } else {
+                    screenWidth = GetMonitorWidth(display); 
+                    screenHeight = GetMonitorHeight(display);
+                }
+                SetWindowSize(screenWidth, screenHeight);
+ 			ToggleFullscreen();
+ 		}
 
         if (IsKeyPressed(KEY_R) && !level.empty()) {
             screen = level.loadScreen(players[0]);

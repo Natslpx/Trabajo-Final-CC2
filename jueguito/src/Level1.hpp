@@ -4,10 +4,10 @@ Screen load1_1(Player& player) {
     player.position = {150, 700};
     player.velocity = {0, 0};
     Screen envItems = make_vector<EnvItem>(
-        std::make_unique<NonClimbable>(Rectangle{0, -100, 1600, 100}, BLACK),
-        std::make_unique<NonClimbable>(Rectangle{0, 900, 1600, 100}, BLACK),
-        std::make_unique<NonClimbable>(Rectangle{-100, 0, 100, 900}, BLACK),
-        std::make_unique<NonClimbable>(Rectangle{1600, 0, 100, 900}, BLACK),
+            std::make_unique<NonClimbable>(Rectangle{0, -100, 1600, 100}, BLACK),
+            std::make_unique<NonClimbable>(Rectangle{0, 900, 1600, 100}, BLACK),
+            std::make_unique<NonClimbable>(Rectangle{-100, 0, 100, 900}, BLACK),
+            std::make_unique<NonClimbable>(Rectangle{1600, 0, 100, 900}, BLACK),
 
         std::make_unique<Block>(Rectangle{0, 700, 1600, 200}, BROWN),
         std::make_unique<Block>(Rectangle{500, 500, 1100, 200}, BROWN),
@@ -39,6 +39,7 @@ Screen load1_2(Player& player) {
         std::make_unique<Block>(Rectangle{1550, 0, 50, 900}, BROWN),
         std::make_unique<Block>(Rectangle{1400, 0, 50, 700}, BROWN),
         std::make_unique<Goal>(Rectangle{1450, 0, 150, 100}, GOLD)
+
     );
     return envItems;
 }
