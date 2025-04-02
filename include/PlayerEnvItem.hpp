@@ -67,18 +67,15 @@ struct Player {
   // Initializes required graphic context
   inline static const Window ventana;
 
-  inline static const Texture2DRaii base{"images/monkey_base.png"};
-  inline static const Texture2DRaii base_dashed{"images/monkey_dashed.png"};
-  inline static const Texture2DRaii grabing{"images/monkey_grabbing.png"};
-  inline static const Texture2DRaii grabbing_dashed{
-      "images/monkey_grabbing_dashed.png"};
-  inline static const Texture2DRaii walking{"images/monkey_walking.png"};
-  inline static const Texture2DRaii climbing{"images/monkey_climbing.png"};
-  inline static const Texture2DRaii climbing_dashed{
-      "images/monkey_climbing_dashed.png"};
-  inline static const Texture2DRaii jumping{"images/monkey_jumping.png"};
-  inline static const Texture2DRaii jumping_dashed{
-      "images/monkey_jumping_dashed.png"};
+  Texture2DRaii base{"images/monkey_base.png"};
+  Texture2DRaii base_dashed{"images/monkey_dashed.png"};
+  Texture2DRaii grabing{"images/monkey_grabbing.png"};
+  Texture2DRaii grabbing_dashed{"images/monkey_grabbing_dashed.png"};
+  Texture2DRaii walking{"images/monkey_walking.png"};
+  Texture2DRaii climbing{"images/monkey_climbing.png"};
+  Texture2DRaii climbing_dashed{"images/monkey_climbing_dashed.png"};
+  Texture2DRaii jumping{"images/monkey_jumping.png"};
+  Texture2DRaii jumping_dashed{"images/monkey_jumping_dashed.png"};
 
   static constexpr float gravity = 2450.0f;
   static constexpr float walkSpeed = 500.0f;
@@ -89,8 +86,8 @@ struct Player {
   static constexpr float width = 40;
   static constexpr float height = 50;
 
-  mutable int walking_timer = 0;
-  mutable int climbing_timer = 0;
+  int walking_timer = 0;
+  int climbing_timer = 0;
 
   Vector2 position = {0, 0};
   Vector2 velocity = {0, 0};
@@ -194,18 +191,13 @@ struct Player {
     int timer = 0;
     if (isGrabbing) {
       if (rawVertical() != 0) {
-        climbing_timer += rawVertical() == 1 ? 1 : -1;
-        climbing_timer %= 40;
         timer = climbing_timer;
-
         sprite = canDash ? &climbing : &climbing_dashed;
         spriteRect =
-            facing ? Rectangle{((float)timer / 10) * width, 0, width, height}
-                   : Rectangle{(((float)timer / 10) + 1) * width, 0, -width,
-                               height};
+            facing
+                ? Rectangle{int(timer / 10) * width, 0, width, height}
+                : Rectangle{(int(timer / 10) + 1) * width, 0, -width, height};
       } else {
-        climbing_timer = 0;
-
         if (onWallRight) {
           spriteRect = Rectangle{width, 0, -width, height};
         } else {
@@ -221,14 +213,9 @@ struct Player {
 
     } else if (onGround) {
       if (rawHorizontal() != 0) {
-        walking_timer += 1;
-        walking_timer %= 40;
         timer = walking_timer;
-
         sprite = &walking;
       } else {
-        walking_timer = 0;
-
         if (canDash) {
           sprite = &base;
         } else {
@@ -237,9 +224,8 @@ struct Player {
       }
 
       spriteRect =
-          facing
-              ? Rectangle{((float)timer / 10) * width, 0, width, height}
-              : Rectangle{(((float)timer / 10) + 1) * width, 0, -width, height};
+          facing ? Rectangle{int(timer / 10) * width, 0, width, height}
+                 : Rectangle{int(timer / 10 + 1) * width, 0, -width, height};
     } else {
       sprite = canDash ? &jumping : &jumping_dashed;
       spriteRect = facing ? Rectangle{0, 0, width, height}
@@ -318,16 +304,18 @@ struct Player {
           stamina > 0) { // Climb
         isGrabbing = true;
         if (rawVertical() != 0) {
+          climbing_timer += rawVertical() == 1 ? 1 : -1;
+          climbing_timer %= 40;
           velocity.y = rawVertical() * climbSpeed;
           stamina -= 45.45 * delta;
         } else {
+          climbing_timer = 0;
           stamina -= 10 * delta;
           velocity.y = 0;
         }
-      } else if (!isInputDown(JUMP) && velocity.y < 0 &&
-                 hasJumped) { // Salto corto
-        velocity.y += 1.75f * gravity * delta;
-      } else if (!isDashing) { // Salto completo || Caída normal
+      } else if (!isInputDown(JUMP) && velocity.y < 0 && hasJumped) {
+        velocity.y += 1.75f * gravity * delta; // Salto corto
+      } else if (!isDashing) {                 // Salto completo || Caída normal
         velocity.y += gravity * delta;
       } else {
         velocity.y *= 0.94; // Gravedad de dash
@@ -335,8 +323,13 @@ struct Player {
       canJump = false;
       position.y += velocity.y * delta;
     } else { // Movimiento vertical a tierra
+      if (rawHorizontal() != 0) {
+        walking_timer += 1;
+        walking_timer %= 40;
+      } else
+        walking_timer = 0;
       if (velocity.y < 0) {
-        position.y += velocity.y * delta; // MOvimiento hacia arriba
+        position.y += velocity.y * delta; // Movimiento hacia arriba
       } else {
         velocity.y = 0;
       }
