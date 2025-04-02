@@ -25,5 +25,13 @@ if (NOT raylib_FOUND)
 endif()
 
 add_executable(${PROJECT_NAME} src/main.cpp)
+set (source "${CMAKE_SOURCE_DIR}/images")
+set (destination "${CMAKE_CURRENT_BINARY_DIR}/images")
+add_custom_command(
+    TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E create_symlink ${source} ${destination} 
+    DEPENDS ${destination}
+    COMMENT "symbolic link resources folder from ${source} => ${destination}"
+)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_link_libraries(${PROJECT_NAME} raylib)

@@ -300,17 +300,15 @@ struct Player {
   }
 
   Player() :
-      sprite_base(LoadTexture("../images/monkey_base.png")),
-      sprite_base_dashed(LoadTexture("../images/monkey_dashed.png")),
-      sprite_grabing(LoadTexture("../images/monkey_grabbing.png")),
-      sprite_grabbing_dashed(
-          LoadTexture("../images/monkey_grabbing_dashed.png")),
-      sprite_walking(LoadTexture("../images/monkey_walking.png")),
-      sprite_climbing(LoadTexture("../images/monkey_climbing.png")),
-      sprite_climbing_dashed(
-          LoadTexture("../images/monkey_climbing_dashed.png")),
-      sprite_jumping(LoadTexture("../images/monkey_jumping.png")),
-      sprite_jumping_dashed(LoadTexture("../images/monkey_jumping_dashed.png")),
+      sprite_base(LoadTexture("images/monkey_base.png")),
+      sprite_base_dashed(LoadTexture("images/monkey_dashed.png")),
+      sprite_grabing(LoadTexture("images/monkey_grabbing.png")),
+      sprite_grabbing_dashed(LoadTexture("images/monkey_grabbing_dashed.png")),
+      sprite_walking(LoadTexture("images/monkey_walking.png")),
+      sprite_climbing(LoadTexture("images/monkey_climbing.png")),
+      sprite_climbing_dashed(LoadTexture("images/monkey_climbing_dashed.png")),
+      sprite_jumping(LoadTexture("images/monkey_jumping.png")),
+      sprite_jumping_dashed(LoadTexture("images/monkey_jumping_dashed.png")),
       isInputDown([](int KEY) {
         return IsKeyDown(KEY);
       }),
@@ -327,17 +325,15 @@ struct Player {
       GRAB2((int)KEY_V) {} // Jugador principal (teclado)
 
   Player(int gamepadNumber) :
-      sprite_base(LoadTexture("../images/monkey_base.png")),
-      sprite_base_dashed(LoadTexture("../images/monkey_dashed.png")),
-      sprite_grabing(LoadTexture("../images/monkey_grabbing.png")),
-      sprite_grabbing_dashed(
-          LoadTexture("../images/monkey_grabbing_dashed.png")),
-      sprite_walking(LoadTexture("../images/monkey_walking.png")),
-      sprite_climbing(LoadTexture("../images/monkey_climbing.png")),
-      sprite_climbing_dashed(
-          LoadTexture("../images/monkey_climbing_dashed.png")),
-      sprite_jumping(LoadTexture("../images/monkey_jumping.png")),
-      sprite_jumping_dashed(LoadTexture("../images/monkey_jumping_dashed.png")),
+      sprite_base(LoadTexture("images/monkey_base.png")),
+      sprite_base_dashed(LoadTexture("images/monkey_dashed.png")),
+      sprite_grabing(LoadTexture("images/monkey_grabbing.png")),
+      sprite_grabbing_dashed(LoadTexture("images/monkey_grabbing_dashed.png")),
+      sprite_walking(LoadTexture("images/monkey_walking.png")),
+      sprite_climbing(LoadTexture("images/monkey_climbing.png")),
+      sprite_climbing_dashed(LoadTexture("images/monkey_climbing_dashed.png")),
+      sprite_jumping(LoadTexture("images/monkey_jumping.png")),
+      sprite_jumping_dashed(LoadTexture("images/monkey_jumping_dashed.png")),
       isInputDown([gamepadNumber](int BUTTON) {
         return IsGamepadButtonDown(gamepadNumber, BUTTON);
       }),
