@@ -1,6 +1,6 @@
 #include "Level.hpp"
 
-Screen load1_1(Player& player) {
+inline Screen load1_1(Player& player) {
   player.position = {150, 700};
   player.velocity = {0, 0};
   Screen envItems = make_vector<EnvItem>(
@@ -20,7 +20,7 @@ Screen load1_1(Player& player) {
   return envItems;
 }
 
-Screen load1_2(Player& player) {
+inline Screen load1_2(Player& player) {
   player.position = {450, 800};
   player.velocity = {0, 0};
   Screen envItems = make_vector<EnvItem>(
@@ -43,7 +43,7 @@ Screen load1_2(Player& player) {
   return envItems;
 }
 
-Screen load1_3(Player& player) {
+inline Screen load1_3(Player& player) {
   player.position = {100, 800};
   player.velocity = {0, 0};
   Screen envItems = make_vector<EnvItem>(

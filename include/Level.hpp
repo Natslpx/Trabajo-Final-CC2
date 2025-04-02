@@ -40,7 +40,7 @@ auto make_vector(Ptrs&&... ptrs) {
   return vec;
 }
 
-Screen loadTestScreen1(Player& player) {
+inline Screen loadTestScreen1(Player& player) {
   player.position = {480, 200};
   player.velocity = {0, 0};
   Screen envItems = make_vector<EnvItem>(
@@ -55,7 +55,7 @@ Screen loadTestScreen1(Player& player) {
   return envItems;
 }
 
-Screen loadTestScreen2(Player& player) {
+inline Screen loadTestScreen2(Player& player) {
   player.position = {300, 400};
   Screen envItems = make_vector<EnvItem>(
       std::make_unique<Block>((Rectangle){0, 400, 525, 200}, DARKGREEN),
@@ -77,7 +77,7 @@ Screen loadTestScreen2(Player& player) {
   return envItems;
 }
 
-Screen loadTestScreen3(Player& player) {
+inline Screen loadTestScreen3(Player& player) {
   player.position = {480, 400};
   Screen envItems = make_vector<EnvItem>(
       std::make_unique<Block>((Rectangle){0, 400, 1000, 200}, DARKGREEN),

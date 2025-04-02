@@ -15,6 +15,7 @@ struct EnvItem {
   Color color;
 
   EnvItem(Color _color) : color(_color) {}
+  virtual ~EnvItem() = default;
   virtual void interact(Player& player) = 0;
   virtual void draw() = 0;
 };
@@ -152,8 +153,9 @@ struct Player {
 
         sprite = canDash ? sprite_climbing : sprite_climbing_dashed;
         spriteRect =
-            facing ? Rectangle{(timer / 10) * width, 0, width, height}
-                   : Rectangle{((timer / 10) + 1) * width, 0, -width, height};
+            facing ? Rectangle{((float)timer / 10) * width, 0, width, height}
+                   : Rectangle{(((float)timer / 10) + 1) * width, 0, -width,
+                               height};
       } else {
         climbing_timer = 0;
 
@@ -188,8 +190,9 @@ struct Player {
       }
 
       spriteRect =
-          facing ? Rectangle{(timer / 10) * width, 0, width, height}
-                 : Rectangle{((timer / 10) + 1) * width, 0, -width, height};
+          facing
+              ? Rectangle{((float)timer / 10) * width, 0, width, height}
+              : Rectangle{(((float)timer / 10) + 1) * width, 0, -width, height};
     } else {
       sprite = canDash ? sprite_jumping : sprite_jumping_dashed;
       spriteRect = facing ? Rectangle{0, 0, width, height}
@@ -420,7 +423,8 @@ struct Block : RectEnvItem {
     if (!player.onWallLeft) {
       if (player.onWallLeft = CheckCollisionCircleRec(
               p + Vector2{-(player.width / 2 - 5), -player.height / 2}, 5,
-              rect)) {
+              rect);
+          player.onWallLeft) {
         p.x = rect.x + rect.width + 20;
         if (player.velocity.y < 0 && !player.isWallJumping)
           player.velocity.y = 0;
@@ -430,7 +434,8 @@ struct Block : RectEnvItem {
     }
     if (!player.onWallRight) {
       if (player.onWallRight = CheckCollisionCircleRec(
-              p + Vector2{player.width / 2 - 5, -player.height / 2}, 5, rect)) {
+              p + Vector2{player.width / 2 - 5, -player.height / 2}, 5, rect);
+          player.onWallRight) {
         p.x = rect.x - 20;
         if (player.velocity.y < 0 && !player.isWallJumping)
           player.velocity.y = 0;
@@ -440,7 +445,8 @@ struct Block : RectEnvItem {
     }
     if (!player.onGround) {
       if (player.onGround =
-              CheckCollisionCircleRec(p + Vector2{-5, 0}, 5, rect)) {
+              CheckCollisionCircleRec(p + Vector2{-5, 0}, 5, rect);
+          player.onGround) {
         player.position.y = rect.y;
       }
     }

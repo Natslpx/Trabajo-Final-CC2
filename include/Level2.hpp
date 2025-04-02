@@ -1,6 +1,6 @@
 #include "Level.hpp"
 
-Screen load2_1(Player& player) {
+inline Screen load2_1(Player& player) {
   player.position = {150, 800}; // Posición inicial del jugador
   player.velocity = {0, 0};
 
@@ -77,7 +77,7 @@ Screen load2_1(Player& player) {
   return envItems;
 }
 
-Screen load2_2(Player& player) {
+inline Screen load2_2(Player& player) {
   player.position = {100, 800}; // Posición inicial del jugador
   player.velocity = {0, 0};
 
@@ -154,7 +154,7 @@ Screen load2_2(Player& player) {
   return envItems;
 }
 
-Screen load2_3(Player& player) {
+inline Screen load2_3(Player& player) {
   player.position = {400, 350}; // Posición inicial del jugador
   player.velocity = {0, 0};
 
