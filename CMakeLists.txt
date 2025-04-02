@@ -25,4 +25,5 @@ if (NOT raylib_FOUND)
 endif()
 
 add_executable(${PROJECT_NAME} jueguito/src/main.cpp)
+target_include_directories(${PROJECT_NAME} PUBLIC jueguito/include)
 target_link_libraries(${PROJECT_NAME} raylib)
