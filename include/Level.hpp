@@ -33,10 +33,11 @@ public:
   }
 };
 
-template <typename T, typename... Ptrs>
-auto make_vector(Ptrs&&... ptrs) {
-  std::vector<std::unique_ptr<T>> vec;
-  (vec.emplace_back(std::forward<Ptrs>(ptrs)), ...);
+template <typename Base, typename... Derived>
+requires(std::is_convertible_v<Derived*, Base*> && ...)
+auto make_vector(Derived&&... ptrs) {
+  std::vector<std::unique_ptr<Base>> vec;
+  (vec.push_back(std::make_unique<Derived>(std::move(ptrs))), ...);
   return vec;
 }
 
@@ -44,49 +45,44 @@ inline Screen loadTestScreen1(Player& player) {
   player.position = {480, 200};
   player.velocity = {0, 0};
   Screen envItems = make_vector<EnvItem>(
-      std::make_unique<Block>((Rectangle){0, 400, 1000, 200}, DARKGREEN),
-      std::make_unique<Block>((Rectangle){100, -600, 300, 1000}, GRAY),
-      std::make_unique<Block>((Rectangle){600, -600, 300, 1000}, GRAY),
-      std::make_unique<Jumper>(500, 390),
-      std::make_unique<Spikes>((Rectangle){0, 350, 100, 50}, WHITE),
-      std::make_unique<Goal>((Rectangle){900, 350, 100, 50}, GOLD),
-      std::make_unique<Gem>(500, -100),
-      std::make_unique<Spikes>((Rectangle){-1000, 600, 3000, 200}, BLACK));
+      Block((Rectangle){0, 400, 1000, 200}, DARKGREEN),
+      Block((Rectangle){100, -600, 300, 1000}, GRAY),
+      Block((Rectangle){600, -600, 300, 1000}, GRAY), Jumper(500, 390),
+      Spikes((Rectangle){0, 350, 100, 50}, WHITE),
+      Goal((Rectangle){900, 350, 100, 50}, GOLD), Gem(500, -100),
+      Spikes((Rectangle){-1000, 600, 3000, 200}, BLACK));
   return envItems;
 }
 
 inline Screen loadTestScreen2(Player& player) {
   player.position = {300, 400};
   Screen envItems = make_vector<EnvItem>(
-      std::make_unique<Block>((Rectangle){0, 400, 525, 200}, DARKGREEN),
-      std::make_unique<Block>((Rectangle){1600, 400, 525, 200}, DARKGREEN),
-      std::make_unique<MoveBlock>((Rectangle){100, 800, 300, 100}, GRAY,
-                                  (Vector2){0, 1},
-                                  [](MoveBlock& mv) {
-                                    return mv.rect.y < 1600;
-                                  }),
-      std::make_unique<MoveBlock>((Rectangle){600, 800, 300, 100}, GRAY,
-                                  (Vector2){1, 0},
-                                  [](MoveBlock& mv) {
-                                    return mv.rect.x < 1700;
-                                  }),
-      std::make_unique<Block>((Rectangle){475, -1000, 50, 1400}, GRAY),
-      std::make_unique<Spikes>((Rectangle){0, 350, 100, 50}, WHITE),
-      std::make_unique<Goal>((Rectangle){1775, 350, 100, 50}, GOLD),
-      std::make_unique<Spikes>((Rectangle){-1000, 1500, 3000, 200}, BLACK));
+      Block((Rectangle){0, 400, 525, 200}, DARKGREEN),
+      Block((Rectangle){1600, 400, 525, 200}, DARKGREEN),
+      MoveBlock((Rectangle){100, 800, 300, 100}, GRAY, (Vector2){0, 1},
+                [](MoveBlock& mv) {
+                  return mv.rect.y < 1600;
+                }),
+      MoveBlock((Rectangle){600, 800, 300, 100}, GRAY, (Vector2){1, 0},
+                [](MoveBlock& mv) {
+                  return mv.rect.x < 1700;
+                }),
+      Block((Rectangle){475, -1000, 50, 1400}, GRAY),
+      Spikes((Rectangle){0, 350, 100, 50}, WHITE),
+      Goal((Rectangle){1775, 350, 100, 50}, GOLD),
+      Spikes((Rectangle){-1000, 1500, 3000, 200}, BLACK));
   return envItems;
 }
 
 inline Screen loadTestScreen3(Player& player) {
   player.position = {480, 400};
-  Screen envItems = make_vector<EnvItem>(
-      std::make_unique<Block>((Rectangle){0, 400, 1000, 200}, DARKGREEN),
-      std::make_unique<Gem>(250, 850), std::make_unique<Gem>(750, 850),
-      std::make_unique<Gem>(1100, 750),
-      std::make_unique<Block>((Rectangle){475, -1000, 50, 1400}, GRAY),
-      std::make_unique<Spikes>((Rectangle){0, 350, 100, 50}, WHITE),
-      std::make_unique<Goal>((Rectangle){900, 350, 100, 50}, GOLD),
-      std::make_unique<Spikes>((Rectangle){-1000, 1500, 3000, 200}, BLACK));
+  Screen envItems =
+      make_vector<EnvItem>(Block((Rectangle){0, 400, 1000, 200}, DARKGREEN),
+                           Gem(250, 850), Gem(750, 850), Gem(1100, 750),
+                           Block((Rectangle){475, -1000, 50, 1400}, GRAY),
+                           Spikes((Rectangle){0, 350, 100, 50}, WHITE),
+                           Goal((Rectangle){900, 350, 100, 50}, GOLD),
+                           Spikes((Rectangle){-1000, 1500, 3000, 200}, BLACK));
   return envItems;
 }
 
