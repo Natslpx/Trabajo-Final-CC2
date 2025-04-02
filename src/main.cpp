@@ -1,7 +1,6 @@
 #include "Level1.hpp"
 #include "Level2.hpp"
 #include "Level3.hpp"
-#include <iostream>
 #include <thread>
 
 void UpdateCameraCenter(Camera2D& camera, Player& player, int width,
@@ -46,41 +45,37 @@ Screen loadMenu(Player& player, Level& level) {
       Warp(Rectangle{1280, 350, 80, 100}, level3, level));
 }
 
-int main() {
-  const int initialWidth = 1600;
-  const int initialHeight = 900;
-  int screenWidth = initialWidth;
-  int screenHeight = initialHeight;
+class Game {
+  int screenWidth = Window::initialWidth;
+  int screenHeight = Window::initialHeight;
+  std::vector<Player> players = make_vector<Player>(Player());
+  Camera2D camera = {{screenWidth / 2.0f, screenHeight / 2.0f},
+                     players[0].position,
+                     0.0f,
+                     1.0f};
+  Level level;
+  Screen screen = loadMenu(players[0], level);
 
-  InitWindow(screenWidth, screenHeight, "Jueguito");
-  BeginDrawing();
-  EndDrawing(); // Carga los mandos por algun motivo
-  std::vector<Player> players;
-  players.emplace_back(); // Jugador incial
-  for (int gamepad = 0; gamepad < 3; ++gamepad) {
-    if (IsGamepadAvailable(gamepad)) {
-      players.emplace_back(gamepad);
-    }
+  void draw() const {
+    BeginDrawing();
+    ClearBackground(SKYBLUE);
+    BeginMode2D(camera);
+    for (const std::unique_ptr<EnvItem>& ei : screen)
+      ei->draw();
+    for (const Player& player : players)
+      if (!player.hasWon)
+        player.draw();
+    EndMode2D();
+    EndDrawing();
   }
 
-  Camera2D camera = {0};
-  camera.target = players[0].position;
-  camera.offset = {screenWidth / 2.0f, screenHeight / 2.0f};
-  camera.rotation = 0.0f;
-  camera.zoom = 1.0f;
-
-  Level level;
-  Screen screen;
-
-  SetTargetFPS(60);
-
-  while (!WindowShouldClose()) {
+  void update() {
     float deltaTime = GetFrameTime();
     if (IsKeyPressed(KEY_F)) {
       int display = GetCurrentMonitor();
       if (IsWindowFullscreen()) {
-        screenWidth = initialWidth;
-        screenHeight = initialHeight;
+        screenWidth = Window::initialWidth;
+        screenHeight = Window::initialHeight;
       } else {
         screenWidth = GetMonitorWidth(display);
         screenHeight = GetMonitorHeight(display);
@@ -97,11 +92,10 @@ int main() {
 
     bool everybody_won = true;
     bool anyone_dead = false;
-
     std::vector<std::thread> threads;
     for (Player& player : players) {
       if (!player.hasWon) {
-        threads.emplace_back([&player, &screen, &deltaTime] {
+        threads.emplace_back([&] {
           player.update(screen, deltaTime);
         });
         everybody_won = false;
@@ -113,11 +107,6 @@ int main() {
 
     for (std::thread& thread : threads)
       thread.join();
-
-    UpdateCameraCenter(camera, players[0], 1600, 900);
-    BeginDrawing();
-    ClearBackground(SKYBLUE);
-    BeginMode2D(camera);
     if (everybody_won) {
       level.next_screen();
       screen = level.loadScreen(players[0]);
@@ -135,20 +124,28 @@ int main() {
         player.isDead = false;
         player.position = players[0].position;
       }
-    } else {
-      for (const std::unique_ptr<EnvItem>& ei : screen)
-        ei->draw();
-      for (Player& player : players)
-        if (!player.hasWon)
-          player.draw();
     }
-    EndMode2D();
-    EndDrawing();
+    UpdateCameraCenter(camera, players[0], 1600, 900);
   }
-  std::cout << "Number of players: " << players.size() << '\n';
-  players.clear();
-  screen.clear();
-  CloseWindow();
 
-  return 0;
+public:
+  Game() {
+    for (int gamepad = 0; gamepad < 3; ++gamepad) {
+      if (IsGamepadAvailable(gamepad)) {
+        players.emplace_back(gamepad);
+      }
+    }
+  }
+  ~Game() = default;
+
+  void run() {
+    while (!WindowShouldClose()) {
+      update();
+      draw();
+    }
+  }
+};
+
+int main() {
+  Game().run();
 }

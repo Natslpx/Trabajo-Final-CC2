@@ -32,12 +32,17 @@ public:
   }
 };
 
+template <typename T, typename... Args>
+inline auto make_vector(Args&&... args) {
+  std::vector<T> vec;
+  (vec.emplace_back(std::forward<Args>(args)), ...);
+  return vec;
+}
+
 template <typename Base, typename... Derived>
 requires(std::is_convertible_v<Derived*, Base*> && ...)
 inline auto make_screen(Derived&&... ptrs) {
-  std::vector<std::unique_ptr<Base>> vec;
-  (vec.push_back(std::make_unique<Derived>(std::move(ptrs))), ...);
-  return vec;
+  return make_vector<std::unique_ptr<Base>>(std::make_unique<Derived>(ptrs)...);
 }
 
 #endif

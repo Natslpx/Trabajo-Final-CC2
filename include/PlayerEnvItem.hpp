@@ -49,7 +49,24 @@ public:
   }
 };
 
+struct Window {
+  static constexpr int initialWidth = 1600;
+  static constexpr int initialHeight = 900;
+  Window() {
+    InitWindow(initialWidth, initialHeight, "Jueguito");
+    SetTargetFPS(60);
+    BeginDrawing();
+    EndDrawing();
+  }
+  ~Window() {
+    CloseWindow();
+  }
+};
+
 struct Player {
+  // Initializes required graphic context
+  inline static const Window ventana;
+
   inline static const Texture2DRaii base{"images/monkey_base.png"};
   inline static const Texture2DRaii base_dashed{"images/monkey_dashed.png"};
   inline static const Texture2DRaii grabing{"images/monkey_grabbing.png"};
