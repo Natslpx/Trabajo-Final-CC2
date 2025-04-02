@@ -37,14 +37,13 @@ struct Warp : RectEnvItem {
 
 Screen loadMenu(Player& player, Level& level) {
   player.position = {800, 450};
-  Screen envItems = make_vector<EnvItem>(
+  return make_screen<EnvItem>(
       Block(Rectangle{0, 450, 1600, 100}, GRAY),
       Text("Menu Principal", 600, 450),
       Warp(Rectangle{320, 350, 80, 100}, level1, level),
       Warp(Rectangle{640, 350, 80, 100}, level2, level),
-      Warp(Rectangle{960, 350, 80, 100}, testLevel, level),
-      Warp(Rectangle{1280, 350, 80, 100}, testLevel, level));
-  return envItems;
+      Warp(Rectangle{960, 350, 80, 100}, level3, level),
+      Warp(Rectangle{1280, 350, 80, 100}, level3, level));
 }
 
 int main() {
