@@ -1,36 +1,28 @@
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.11.0)
+project(jueguito VERSION 1.1)
+
 set (CMAKE_CXX_STANDARD 23)
-
-project(jueguito VERSION 1.0)
-
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
-set(RAYLIB_PATH ".." CACHE PATH "Path to the Raylib library")
-
-include_directories(
-    ${RAYLIB_PATH}/src
-    ${RAYLIB_PATH}/src/external
-)
-
-if(WIN32)
-    add_definitions(-DPLATFORM_DESKTOP)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-missing-braces -Wunused-result")
-    set(LIBS ${LIBS} raylib opengl32 gdi32 winmm)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${RAYLIB_PATH}/src/raylib.rc.data -Wl,--subsystem,windows")
-elseif(UNIX)
-    add_definitions(-DPLATFORM_DESKTOP)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-missing-braces -Wunused-result -D_DEFAULT_SOURCE")
-    set(LIBS ${LIBS} raylib GL m pthread dl rt X11 c atomic)
+set(RAYLIB_VERSION 5.5)
+find_package(raylib ${RAYLIB_VERSION} QUIET) 
+if (NOT raylib_FOUND) 
+  include(FetchContent)
+  FetchContent_Declare(
+    raylib
+    DOWNLOAD_EXTRACT_TIMESTAMP OFF
+    URL https://github.com/raysan5/raylib/archive/refs/tags/${RAYLIB_VERSION}.tar.gz
+  )
+  FetchContent_GetProperties(raylib)
+  if (NOT raylib_POPULATED) 
+    set(FETCHCONTENT_QUIET NO)
+    FetchContent_MakeAvailable(raylib)
+    set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) 
+  endif()
 endif()
 
-add_executable(main src/main.cpp)
-
-target_link_libraries(main ${LIBS})
-
-link_directories(
-    ${RAYLIB_PATH}/src
-)
+add_executable(${PROJECT_NAME} src/main.cpp)
+target_link_libraries(${PROJECT_NAME} raylib)

@@ -1,10 +1,8 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/jueguito.dir/jueguito/src/main.cpp.obj"
-  "CMakeFiles/jueguito.dir/jueguito/src/main.cpp.obj.d"
-  "jueguito.exe"
-  "jueguito.exe.manifest"
+  "CMakeFiles/jueguito.dir/jueguito/src/main.cpp.o"
+  "CMakeFiles/jueguito.dir/jueguito/src/main.cpp.o.d"
+  "jueguito"
   "jueguito.pdb"
-  "libjueguito.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.
