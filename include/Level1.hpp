@@ -1,6 +1,7 @@
 #ifndef LEVEL_1_HPP
 #define LEVEL_1_HPP
 
+#include "BasicItems.hpp"
 #include "Level.hpp"
 
 namespace {
