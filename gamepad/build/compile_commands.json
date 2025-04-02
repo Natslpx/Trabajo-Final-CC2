@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/home/all23tor/projects/raylib/gamepad/build",
-  "command": "/usr/bin/c++ -DPLATFORM_DESKTOP -I/home/all23tor/projects/raylib/gamepad/../src -g -std=gnu++23 -o CMakeFiles/main.dir/src/main.cpp.o -c /home/all23tor/projects/raylib/gamepad/src/main.cpp",
-  "file": "/home/all23tor/projects/raylib/gamepad/src/main.cpp"
-}
-]
