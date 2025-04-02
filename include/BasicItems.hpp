@@ -6,8 +6,6 @@
 #include <utility>
 #include <functional>
 
-#include "Vector2.hpp"
-
 #ifndef BASIC_ITEMS_H
 #define BASIC_ITEMS_H
 
@@ -228,7 +226,7 @@ struct Player {
 
         if (isInputPressed(DASH) && canDash && !isDashing) { //Dash
             if (rawHorizontal()!=0|| rawVertical()!=0) {
-                velocity = normalized(Vector2{(float)rawHorizontal(), (float)rawVertical()}) * dashSpeed;
+                velocity = Vector2Normalize(Vector2{(float)rawHorizontal(), (float)rawVertical()}) * dashSpeed;
                 canDash = false;
                 isDashing = 14;
                 onGround = false;
@@ -431,7 +429,7 @@ struct MoveBlock : Block {
 
     }
 
-    MoveBlock(Rectangle _rect, Color _color, Vector2 _direction, bool (*_condition)(MoveBlock&)) : fall(false), Block(_rect, _color), direction(normalized(_direction)), condition(_condition) {}
+    MoveBlock(Rectangle _rect, Color _color, Vector2 _direction, bool (*_condition)(MoveBlock&)) : fall(false), Block(_rect, _color), direction(Vector2Normalize(_direction)), condition(_condition) {}
 
 };
 
