@@ -1,5 +1,5 @@
-#ifndef LEVEL_3_HPP
-#define LEVEL_3_HPP
+#ifndef LEVEL_2_HPP
+#define LEVEL_2_HPP
 
 #include "Level.hpp"
 
