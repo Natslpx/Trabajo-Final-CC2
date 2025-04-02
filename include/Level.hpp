@@ -6,8 +6,8 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
-typedef std::vector<std::unique_ptr<EnvItem>> Screen;
-typedef std::function<Screen(Player&)> ScreenLoader;
+using Screen = std::vector<std::unique_ptr<EnvItem>>;
+using ScreenLoader = Screen (*)(Player&);
 
 class Level {
   std::vector<ScreenLoader> screens;
