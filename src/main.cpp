@@ -45,9 +45,27 @@ Screen loadMenu(Player& player, Level& level) {
       Warp(Rectangle{1280, 350, 80, 100}, level3, level));
 }
 
+struct Window {
+  static constexpr int initialWidth = 1600;
+  static constexpr int initialHeight = 900;
+
+  Window(const char* name) {
+    InitWindow(initialWidth, initialHeight, name);
+    SetTargetFPS(60);
+    BeginDrawing();
+    EndDrawing();
+  }
+  ~Window() {
+    CloseWindow();
+  }
+};
+
 class Game {
   int screenWidth = Window::initialWidth;
   int screenHeight = Window::initialHeight;
+  // Initializes required graphic context, careful placement needed
+  const Window ventana{"Jueguito"};
+
   std::vector<Player> players = make_vector<Player>(Player());
   Camera2D camera = {{screenWidth / 2.0f, screenHeight / 2.0f},
                      players[0].position,
@@ -104,9 +122,9 @@ class Game {
         anyone_dead = true;
       }
     }
-
     for (std::thread& thread : threads)
       thread.join();
+    
     if (everybody_won) {
       level.next_screen();
       screen = level.loadScreen(players[0]);
