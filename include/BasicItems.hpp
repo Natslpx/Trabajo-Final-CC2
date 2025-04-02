@@ -22,10 +22,9 @@ struct Block : RectEnvItem {
     Vector2& p = player.position;
 
     if (!player.onWallLeft) {
-      if (player.onWallLeft = CheckCollisionCircleRec(
-              p + Vector2{-(player.width / 2 - 5), -player.height / 2}, 5,
-              rect);
-          player.onWallLeft) {
+      player.onWallLeft = CheckCollisionCircleRec(
+          p + Vector2{-(player.width / 2 - 5), -player.height / 2}, 5, rect);
+      if (player.onWallLeft) {
         p.x = rect.x + rect.width + 20;
         if (player.velocity.y < 0 && !player.isWallJumping)
           player.velocity.y = 0;
@@ -34,9 +33,9 @@ struct Block : RectEnvItem {
       }
     }
     if (!player.onWallRight) {
-      if (player.onWallRight = CheckCollisionCircleRec(
-              p + Vector2{player.width / 2 - 5, -player.height / 2}, 5, rect);
-          player.onWallRight) {
+      player.onWallRight = CheckCollisionCircleRec(
+          p + Vector2{player.width / 2 - 5, -player.height / 2}, 5, rect);
+      if (player.onWallRight) {
         p.x = rect.x - 20;
         if (player.velocity.y < 0 && !player.isWallJumping)
           player.velocity.y = 0;
@@ -45,11 +44,9 @@ struct Block : RectEnvItem {
       }
     }
     if (!player.onGround) {
-      if (player.onGround =
-              CheckCollisionCircleRec(p + Vector2{-5, 0}, 5, rect);
-          player.onGround) {
+      player.onGround = CheckCollisionCircleRec(p + Vector2{-5, 0}, 5, rect);
+      if (player.onGround)
         player.position.y = rect.y;
-      }
     }
 
     if (CheckCollisionCircleRec(p + Vector2{-5, -player.height}, 5, rect)) {
@@ -74,7 +71,7 @@ struct NonClimbable : Block {
 struct MoveBlock : Block {
   bool fall;
   int timer;
-  std::function<bool(MoveBlock&)> condition;
+  bool (*condition)(const MoveBlock&);
 
   const float displacement = 5;
   const Vector2 direction;
@@ -108,7 +105,7 @@ struct MoveBlock : Block {
   }
 
   MoveBlock(Rectangle _rect, Color _color, Vector2 _direction,
-            bool (*_condition)(MoveBlock&)) :
+            bool (*_condition)(const MoveBlock&)) :
       fall(false),
       Block(_rect, _color),
       direction(Vector2Normalize(_direction)),

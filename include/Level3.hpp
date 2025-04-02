@@ -23,11 +23,11 @@ Screen load3_2(Player& player) {
       Block((Rectangle){0, 400, 525, 200}, DARKGREEN),
       Block((Rectangle){1600, 400, 525, 200}, DARKGREEN),
       MoveBlock((Rectangle){100, 800, 300, 100}, GRAY, (Vector2){0, 1},
-                [](MoveBlock& mv) {
+                [](const MoveBlock& mv) {
                   return mv.rect.y < 1600;
                 }),
       MoveBlock((Rectangle){600, 800, 300, 100}, GRAY, (Vector2){1, 0},
-                [](MoveBlock& mv) {
+                [](const MoveBlock& mv) {
                   return mv.rect.x < 1700;
                 }),
       Block((Rectangle){475, -1000, 50, 1400}, GRAY),

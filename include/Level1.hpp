@@ -55,7 +55,7 @@ Screen load1_3(Player& player) {
       Block(Rectangle{300, 550, 80, 50}, BROWN),
       Block(Rectangle{0, 250, 100, 50}, BROWN),
       MoveBlock(Rectangle{900, 250, 200, 50}, BROWN, Vector2{1, 1},
-                [](MoveBlock& mv) {
+                [](const MoveBlock& mv) {
                   return mv.rect.x < 1000;
                 }),
       Gem(Vector2{400, 100}), Goal(Rectangle{1400, 870, 150, 30}, GOLD));
