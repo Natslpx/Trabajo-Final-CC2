@@ -1,7 +1,7 @@
-#include "Level.hpp"
-
 #ifndef LEVEL_3_HPP
 #define LEVEL_3_HPP
+
+#include "Level.hpp"
 
 namespace {
 Screen load2_1(Player& player) {
