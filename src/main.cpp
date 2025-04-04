@@ -18,8 +18,7 @@ struct Warp : RectEnvItem {
       write(_write) {}
 
   void interact(Player& player) override {
-    if (CheckCollisionRecs(player.getBody(), rect) &&
-        player.isInputPressed(player.UP)) {
+    if (CheckCollisionRecs(player.getBody(), rect) && player.controller.up()) {
       write = read;
       player.hasWon = true;
     }
@@ -124,7 +123,7 @@ class Game {
     }
     for (std::thread& thread : threads)
       thread.join();
-    
+
     if (everybody_won) {
       level.next_screen();
       screen = level.loadScreen(players[0]);

@@ -19,6 +19,77 @@ struct EnvItem {
   virtual void draw() = 0;
 };
 
+class Controller {
+  const int UP;
+  const int DOWN;
+  const int LEFT;
+  const int RIGHT;
+  const int JUMP;
+  const int DASH;
+  const int GRAB1;
+  const int GRAB2;
+  const std::function<bool(int)> isInputDown;
+  const std::function<bool(int)> isInputPressed;
+
+public:
+  Controller() :
+      isInputDown([](int KEY) {
+        return IsKeyDown(KEY);
+      }),
+      isInputPressed([](int KEY) {
+        return IsKeyPressed(KEY);
+      }),
+      UP(KEY_UP),
+      DOWN(KEY_DOWN),
+      LEFT(KEY_LEFT),
+      RIGHT(KEY_RIGHT),
+      JUMP(KEY_C),
+      DASH(KEY_X),
+      GRAB1(KEY_Z),
+      GRAB2(KEY_V) {}
+
+  Controller(int gamepadNumber) :
+      isInputDown([gamepadNumber](int BUTTON) {
+        return IsGamepadButtonDown(gamepadNumber, BUTTON);
+      }),
+      isInputPressed([gamepadNumber](int BUTTON) {
+        return IsGamepadButtonPressed(gamepadNumber, BUTTON);
+      }),
+      UP(GAMEPAD_BUTTON_LEFT_FACE_UP),
+      DOWN(GAMEPAD_BUTTON_LEFT_FACE_DOWN),
+      LEFT(GAMEPAD_BUTTON_LEFT_FACE_LEFT),
+      RIGHT(GAMEPAD_BUTTON_LEFT_FACE_RIGHT),
+      JUMP(GAMEPAD_BUTTON_RIGHT_FACE_DOWN),
+      DASH(GAMEPAD_BUTTON_RIGHT_FACE_LEFT),
+      GRAB1(GAMEPAD_BUTTON_LEFT_TRIGGER_1),
+      GRAB2(GAMEPAD_BUTTON_RIGHT_TRIGGER_1) {}
+
+  bool left() const {
+    return isInputDown(LEFT);
+  }
+  bool right() const {
+    return isInputDown(RIGHT);
+  }
+  bool up() const {
+    return isInputDown(UP);
+  }
+  bool down() const {
+    return isInputDown(DOWN);
+  }
+  bool jump() const {
+    return isInputDown(JUMP);
+  }
+  bool pressed_jump() const {
+    return isInputPressed(JUMP);
+  }
+  bool grab() const {
+    return isInputDown(GRAB1) || isInputDown(GRAB2);
+  }
+  bool dash() const {
+    return isInputPressed(DASH);
+  }
+};
+
 class Texture2DRaii {
   Texture2D texture;
 
@@ -93,21 +164,12 @@ struct Player {
   float horizontal = 0;
   float vertical = 0;
 
-  const int UP;
-  const int DOWN;
-  const int LEFT;
-  const int RIGHT;
-  const int JUMP;
-  const int DASH;
-  const int GRAB1;
-  const int GRAB2;
-  const std::function<bool(int)> isInputDown;
-  const std::function<bool(int)> isInputPressed;
+  const Controller controller;
 
   float getHorizontal() {
-    if (isInputDown(LEFT)) {
+    if (controller.left()) {
       horizontal -= 0.05;
-    } else if (isInputDown(RIGHT)) {
+    } else if (controller.right()) {
       horizontal += 0.05;
     } else if (horizontal > 0) {
       horizontal -= 0.1;
@@ -126,9 +188,9 @@ struct Player {
     return horizontal;
   }
   float getVertical() {
-    if (isInputDown(UP)) {
+    if (controller.up()) {
       vertical -= 0.05;
-    } else if (isInputDown(DOWN)) {
+    } else if (controller.down()) {
       vertical += 0.05;
     } else if (vertical > 0) {
       vertical -= 0.05;
@@ -148,17 +210,17 @@ struct Player {
   }
 
   int rawHorizontal() const {
-    if (isInputDown(LEFT))
+    if (controller.left())
       return -1;
-    if (isInputDown(RIGHT))
+    if (controller.right())
       return 1;
     return 0;
   }
 
   int rawVertical() const {
-    if (isInputDown(UP))
+    if (controller.up())
       return -1;
-    if (isInputDown(DOWN))
+    if (controller.down())
       return 1;
     return 0;
   }
@@ -246,12 +308,12 @@ struct Player {
       }
     }
 
-    if (isInputPressed(JUMP) && canJump) { // Salto
+    if (controller.pressed_jump() && canJump) { // Salto
       velocity.y = -jumpSpeed;
       canJump = false;
       hasJumped = true;
       onGround = false;
-    } else if (isInputPressed(JUMP) && !isDashing &&
+    } else if (controller.pressed_jump() && !isDashing &&
                (onWallLeft || onWallRight)) { // Wall Jump
       velocity.y = -jumpSpeed;
       velocity.x = onWallLeft ? walkSpeed : -walkSpeed;
@@ -261,7 +323,7 @@ struct Player {
       stamina -= 27.5;
     }
 
-    if (isInputPressed(DASH) && canDash && !isDashing) { // Dash
+    if (controller.dash() && canDash && !isDashing) { // Dash
       if (rawHorizontal() != 0 || rawVertical() != 0) {
         velocity = Vector2Normalize(
                        Vector2{(float)rawHorizontal(), (float)rawVertical()}) *
@@ -282,9 +344,8 @@ struct Player {
 
     isGrabbing = false;
     if (!onGround) { // Movimiento vertical aéreo
-      if ((onWallLeft || onWallRight) &&
-          (isInputDown(GRAB1) || isInputDown(GRAB2)) && !isWallJumping &&
-          stamina > 0) { // Climb
+      if ((onWallLeft || onWallRight) && (controller.grab()) &&
+          !isWallJumping && stamina > 0) { // Climb
         isGrabbing = true;
         if (rawVertical() != 0) {
           climbing_timer += rawVertical() == 1 ? 1 : -1;
@@ -296,7 +357,7 @@ struct Player {
           stamina -= 10 * delta;
           velocity.y = 0;
         }
-      } else if (!isInputDown(JUMP) && velocity.y < 0 && hasJumped) {
+      } else if (!controller.jump() && velocity.y < 0 && hasJumped) {
         velocity.y += 1.75f * gravity * delta; // Salto corto
       } else if (!isDashing) {                 // Salto completo || Caída normal
         velocity.y += gravity * delta;
@@ -323,37 +384,8 @@ struct Player {
     }
   }
 
-  Player() :
-      isInputDown([](int KEY) {
-        return IsKeyDown(KEY);
-      }),
-      isInputPressed([](int KEY) {
-        return IsKeyPressed(KEY);
-      }),
-      UP(KEY_UP),
-      DOWN(KEY_DOWN),
-      LEFT(KEY_LEFT),
-      RIGHT(KEY_RIGHT),
-      JUMP(KEY_C),
-      DASH(KEY_X),
-      GRAB1(KEY_Z),
-      GRAB2(KEY_V) {} // Jugador principal (teclado)
-
-  Player(int gamepadNumber) :
-      isInputDown([gamepadNumber](int BUTTON) {
-        return IsGamepadButtonDown(gamepadNumber, BUTTON);
-      }),
-      isInputPressed([gamepadNumber](int BUTTON) {
-        return IsGamepadButtonPressed(gamepadNumber, BUTTON);
-      }),
-      UP(GAMEPAD_BUTTON_LEFT_FACE_UP),
-      DOWN(GAMEPAD_BUTTON_LEFT_FACE_DOWN),
-      LEFT(GAMEPAD_BUTTON_LEFT_FACE_LEFT),
-      RIGHT(GAMEPAD_BUTTON_LEFT_FACE_RIGHT),
-      JUMP(GAMEPAD_BUTTON_RIGHT_FACE_DOWN),
-      DASH(GAMEPAD_BUTTON_RIGHT_FACE_LEFT),
-      GRAB1(GAMEPAD_BUTTON_LEFT_TRIGGER_1),
-      GRAB2(GAMEPAD_BUTTON_RIGHT_TRIGGER_1) {} // Jugador de mando
+  Player() : controller{} {}
+  Player(int gamepadNumber) : controller{gamepadNumber} {}
 
   Player(const Player&) = delete;
   Player& operator=(const Player&) = delete;
