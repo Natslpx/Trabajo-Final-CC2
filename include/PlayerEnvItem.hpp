@@ -4,7 +4,6 @@
 #include "raylib.h"
 #include "raymath.h"
 
-#include <functional>
 #include <memory>
 #include <vector>
 
@@ -20,6 +19,8 @@ struct EnvItem {
 };
 
 class Controller {
+  using Predicate = bool (*)(int, int);
+
   const int UP;
   const int DOWN;
   const int LEFT;
@@ -28,15 +29,17 @@ class Controller {
   const int DASH;
   const int GRAB1;
   const int GRAB2;
-  const std::function<bool(int)> isInputDown;
-  const std::function<bool(int)> isInputPressed;
+  const int gamepad_number;
+  const Predicate isInputDown;
+  const Predicate isInputPressed;
 
 public:
   Controller() :
-      isInputDown([](int KEY) {
+      gamepad_number(-1),
+      isInputDown([](int KEY, int) -> bool {
         return IsKeyDown(KEY);
       }),
-      isInputPressed([](int KEY) {
+      isInputPressed([](int KEY, int) {
         return IsKeyPressed(KEY);
       }),
       UP(KEY_UP),
@@ -48,11 +51,12 @@ public:
       GRAB1(KEY_Z),
       GRAB2(KEY_V) {}
 
-  Controller(int gamepadNumber) :
-      isInputDown([gamepadNumber](int BUTTON) {
+  Controller(int _gamepad_number) :
+      gamepad_number(_gamepad_number),
+      isInputDown([](int BUTTON, int gamepadNumber) {
         return IsGamepadButtonDown(gamepadNumber, BUTTON);
       }),
-      isInputPressed([gamepadNumber](int BUTTON) {
+      isInputPressed([](int BUTTON, int gamepadNumber) {
         return IsGamepadButtonPressed(gamepadNumber, BUTTON);
       }),
       UP(GAMEPAD_BUTTON_LEFT_FACE_UP),
@@ -65,28 +69,29 @@ public:
       GRAB2(GAMEPAD_BUTTON_RIGHT_TRIGGER_1) {}
 
   bool left() const {
-    return isInputDown(LEFT);
+    return isInputDown(LEFT, gamepad_number);
   }
   bool right() const {
-    return isInputDown(RIGHT);
+    return isInputDown(RIGHT, gamepad_number);
   }
   bool up() const {
-    return isInputDown(UP);
+    return isInputDown(UP, gamepad_number);
   }
   bool down() const {
-    return isInputDown(DOWN);
+    return isInputDown(DOWN, gamepad_number);
   }
   bool jump() const {
-    return isInputDown(JUMP);
+    return isInputDown(JUMP, gamepad_number);
   }
   bool pressed_jump() const {
-    return isInputPressed(JUMP);
+    return isInputPressed(JUMP, gamepad_number);
   }
   bool grab() const {
-    return isInputDown(GRAB1) || isInputDown(GRAB2);
+    return isInputDown(GRAB1, gamepad_number) ||
+           isInputDown(GRAB2, gamepad_number);
   }
   bool dash() const {
-    return isInputPressed(DASH);
+    return isInputPressed(DASH, gamepad_number);
   }
 };
 
