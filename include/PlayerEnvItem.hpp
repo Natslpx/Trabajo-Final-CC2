@@ -110,9 +110,9 @@ struct Player {
     } else if (isInputDown(RIGHT)) {
       horizontal += 0.05;
     } else if (horizontal > 0) {
-      horizontal -= 0.05;
+      horizontal -= 0.1;
     } else if (horizontal < 0) {
-      horizontal += 0.05;
+      horizontal += 0.1;
     }
 
     if (horizontal > 1.0f) {
